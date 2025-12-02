@@ -1,6 +1,6 @@
 package days
 
-//const day1 = "https://adventofcode.com/2024/day/1/input"
+//day1s1, day1s2
 
 // day 1: pair up values in two lists, sorted in ascending order
 // and get the difference between the numbers
