@@ -1,7 +1,7 @@
 package days
 
 import (
-	"errors"
+	"adventofcode2024/internals"
 	"fmt"
 )
 
@@ -17,17 +17,24 @@ func getFileName(day int, star int, example bool) string {
 	return fmt.Sprintf("d%ds%d.txt", day, star)
 }
 
-func getFilePath(source int, filename string) (string, error) {
+func getFilePath(source int, filename string) string {
 	var sourceDir string
 	switch source {
 	case input:
 		sourceDir = "input"
 	case output:
 		sourceDir = "output"
-	default:
-		return "", errors.New("source need to be 0 for input and 1 for output, use the enum")
 	}
-	return pathToInputOutput + sourceDir + filename, nil
+	return pathToInputOutput + sourceDir + filename
+}
+
+func getInput(filepath, url string) []byte {
+	data, err := internals.GetData(url, filepath)
+	if err != nil {
+		//DO STUFF
+	}
+
+	return data
 }
 
 // func saveOutput(data, filename/path, example) calls either normally or uses saveExample???
