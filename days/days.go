@@ -14,15 +14,11 @@ const (
 func RunDay(day, star int, example bool) {
 	filename := getFileName(day, star, example)
 	filepath := getFilePath(INPUT, filename)
-	url := getUrl(day, star)
-	if url == "ERROR" {
-		fmt.Println("ERROR: add the url for the new day!!!")
-		os.Exit(1)
-	}
 
-	data, err := getInput(filepath, url)
+	data, err := getInput(filepath)
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println("Did you make sure you saved the input to a file with the correct name?")
 		os.Exit(1)
 	}
 
@@ -43,15 +39,15 @@ func getFilePath(source int, filename string) string {
 	var sourceDir string
 	switch source {
 	case INPUT:
-		sourceDir = "input"
+		sourceDir = "inputs"
 	case OUTPUT:
-		sourceDir = "output"
+		sourceDir = "outputs"
 	}
-	return pathToInputOutput + sourceDir + filename
+	return pathToInputOutput + "/" + sourceDir + "/" + filename
 }
 
-func getInput(filepath, url string) ([]byte, error) {
-	data, err := internals.GetData(url, filepath)
+func getInput(filepath string) ([]byte, error) {
+	data, err := internals.GetData(filepath)
 	if err != nil {
 		return nil, fmt.Errorf("error getting input: %w", err)
 	}
@@ -61,7 +57,7 @@ func getInput(filepath, url string) ([]byte, error) {
 // func saveOutput(data, filename/path, example) calls either normally or uses saveExample???
 func saveOutput(data []byte, filepath string, example bool) {
 	if example {
-		exampleFileData, err := internals.GetData("", filepath)
+		exampleFileData, err := internals.GetData(filepath)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)

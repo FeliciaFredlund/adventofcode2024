@@ -2,13 +2,11 @@ package internals
 
 import (
 	"fmt"
-	"io"
-	"net/http"
 	"os"
 )
 
 // func getDataFromUrl(url, filename/path) make http request and save to file
-func getDataFromUrl(url, filepath string) ([]byte, error) {
+/*func getDataFromUrl(url, filepath string) ([]byte, error) {
 	res, err := http.Get(url)
 	if err != nil {
 		return nil, fmt.Errorf("error making request from url (%s): %w", url, err)
@@ -24,15 +22,6 @@ func getDataFromUrl(url, filepath string) ([]byte, error) {
 	return data, nil
 }
 
-// func getDataFromFile(filename/path) get data from cached file
-func getDataFromFile(filepath string) ([]byte, error) {
-	data, err := os.ReadFile(filepath)
-	if err != nil {
-		return nil, fmt.Errorf("error reading file (%s): %w", filepath, err)
-	}
-	return data, nil
-}
-
 // func isCached(filename/path) checks if input have already been cached
 func isCached(filepath string) bool {
 	_, err := os.Stat(filepath)
@@ -42,21 +31,21 @@ func isCached(filepath string) bool {
 		return false
 	}
 	return true
+}*/
+
+// func getDataFromFile(filename/path) get data from cached file
+func getDataFromFile(filepath string) ([]byte, error) {
+	data, err := os.ReadFile(filepath)
+	if err != nil {
+		return nil, fmt.Errorf("error reading file (%s): %w", filepath, err)
+	}
+	return data, nil
 }
 
-func GetData(url, filepath string) ([]byte, error) {
-	if isCached(filepath) {
-		data, err := getDataFromFile(filepath)
-		if err != nil {
-			return nil, fmt.Errorf("error getting data from cached file: %w", err)
-		}
-		return data, nil
-	}
-
-	// get data from url instead since not cached
-	data, err := getDataFromUrl(url, filepath)
+func GetData(filepath string) ([]byte, error) {
+	data, err := getDataFromFile(filepath)
 	if err != nil {
-		return nil, fmt.Errorf("error getting data from url: %w", err)
+		return nil, fmt.Errorf("error getting data from cached file: %w", err)
 	}
 	return data, nil
 }
