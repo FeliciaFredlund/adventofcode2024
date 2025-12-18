@@ -3,14 +3,36 @@ package days
 import (
 	"adventofcode2024/internals"
 	"fmt"
+	"os"
 )
 
 const (
-	input = iota
-	output
+	INPUT = iota
+	OUTPUT
 )
 
-func getFileName(day int, star int, example bool) string {
+func RunDay(day, star int, example bool) {
+	filename := getFileName(day, star, example)
+	filepath := getFilePath(INPUT, filename)
+	url := getUrl(day, star)
+	if url == "ERROR" {
+		fmt.Println("ERROR: add the url for the new day!!!")
+		os.Exit(1)
+	}
+
+	data, err := getInput(filepath, url)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	output := day1star1(data)
+	outputFilepath := getFilePath(OUTPUT, filename)
+	saveOutput(output, outputFilepath, example)
+	fmt.Println("Output: " + string(output))
+}
+
+func getFileName(day, star int, example bool) string {
 	if example {
 		return fmt.Sprintf("d%ds%d_example.txt", day, star)
 	}
@@ -20,27 +42,36 @@ func getFileName(day int, star int, example bool) string {
 func getFilePath(source int, filename string) string {
 	var sourceDir string
 	switch source {
-	case input:
+	case INPUT:
 		sourceDir = "input"
-	case output:
+	case OUTPUT:
 		sourceDir = "output"
 	}
 	return pathToInputOutput + sourceDir + filename
 }
 
-func getInput(filepath, url string) []byte {
+func getInput(filepath, url string) ([]byte, error) {
 	data, err := internals.GetData(url, filepath)
 	if err != nil {
-		//DO STUFF
+		return nil, fmt.Errorf("error getting input: %w", err)
 	}
-
-	return data
+	return data, nil
 }
 
 // func saveOutput(data, filename/path, example) calls either normally or uses saveExample???
 func saveOutput(data []byte, filepath string, example bool) {
 	if example {
-		// do things specific for example, like read in the input file and append the data slice to it
+		exampleFileData, err := internals.GetData("", filepath)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+		data = append(exampleFileData, data...)
 	}
-	// call on io SaveToFile(data, filepath)
+
+	err := internals.SaveToFile(data, filepath)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 }
