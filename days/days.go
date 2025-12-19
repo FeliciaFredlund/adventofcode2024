@@ -12,19 +12,28 @@ const (
 )
 
 func RunDay(day, star int, example bool) {
-	filename := getFileName(day, star, example)
-	filepath := getFilePath(INPUT, filename)
+	inputFilename := getFileName(day, 1, example)
+	inputFilepath := getFilePath(INPUT, inputFilename)
 
-	data, err := getInput(filepath)
+	input, err := getInput(inputFilepath)
 	if err != nil {
 		fmt.Println(err)
 		fmt.Println("Did you make sure you saved the input to a file with the correct name?")
 		os.Exit(1)
 	}
 
-	output := day1star1(data)
-	outputFilepath := getFilePath(OUTPUT, filename)
-	saveOutput(output, outputFilepath, example)
+	output := getOutput(day, star, input)
+	if output == nil {
+		fmt.Println("Please add dayXstarX function to getOutput() also implement it")
+		os.Exit(1)
+	}
+
+	if !example {
+		outputFilename := getFileName(day, star, false)
+		outputFilepath := getFilePath(OUTPUT, outputFilename)
+		saveOutput(output, outputFilepath, example)
+	}
+
 	fmt.Println("Output: " + string(output))
 }
 
@@ -52,6 +61,34 @@ func getInput(filepath string) ([]byte, error) {
 		return nil, fmt.Errorf("error getting input: %w", err)
 	}
 	return data, nil
+}
+
+func getOutput(day, star int, data []byte) []byte {
+	switch day {
+	case 1:
+		if star == 1 {
+			return day1star1(data)
+		}
+		return day1star2(data)
+		/*
+			case 2:
+				if star == 1 {
+					return day2star1(data)
+				}
+				return day2star2(data)
+			case 3:
+				if star == 1 {
+					return day3star1(data)
+				}
+				return day3star2(data)
+			case 4:
+				if star == 1 {
+					return day4star1(data)
+				}
+				return day4star2(data)
+		*/
+	}
+	return nil
 }
 
 // func saveOutput(data, filename/path, example) calls either normally or uses saveExample???
