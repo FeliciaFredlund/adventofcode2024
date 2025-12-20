@@ -6,13 +6,6 @@ import (
 	"strings"
 )
 
-// day 1: pair up values in two lists, sorted in ascending order
-// and get the difference between the numbers
-// sum those differences together
-
-// func parseInput into two slices
-// func getDifference between values
-
 func day1star1(data []byte) []byte {
 	stringified := string(data)
 	numbers := strings.Fields(stringified)
@@ -43,6 +36,23 @@ func day1star1(data []byte) []byte {
 }
 
 func day1star2(data []byte) []byte {
-	// IMPLEMENT
-	return data
+	stringified := string(data)
+	numbers := strings.Fields(stringified)
+	leftList := []string{}
+	rightList := map[string]int{}
+	for i, number := range numbers {
+		if i%2 == 0 {
+			leftList = append(leftList, number)
+		} else {
+			rightList[number]++
+		}
+	}
+
+	similarityScore := 0
+	for _, item := range leftList {
+		value, _ := strconv.Atoi(item)
+		similarityScore += (value * rightList[item])
+	}
+
+	return []byte(strconv.Itoa(similarityScore))
 }
