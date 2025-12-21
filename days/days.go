@@ -32,6 +32,14 @@ func RunDay(day, star int, example bool) {
 		outputFilename := getFileName(day, star, false)
 		outputFilepath := getFilePath(OUTPUT, outputFilename)
 		saveOutput(output, outputFilepath, example)
+	} else {
+		exampleFilename := fmt.Sprintf("d%d_example.txt", day)
+		exampleOutput, err := getInput(getFilePath(OUTPUT, exampleFilename))
+		if err != nil {
+			fmt.Printf("Please add the example output for day %d\n", day)
+			os.Exit(1)
+		}
+		fmt.Printf("Expected Result:\n%s\n", string(exampleOutput))
 	}
 
 	fmt.Println("Output: " + string(output))
@@ -70,12 +78,12 @@ func getOutput(day, star int, data []byte) []byte {
 			return day1star1(data)
 		}
 		return day1star2(data)
+	case 2:
+		if star == 1 {
+			return day2star1(data)
+		}
+		return day2star2(data)
 		/*
-			case 2:
-				if star == 1 {
-					return day2star1(data)
-				}
-				return day2star2(data)
 			case 3:
 				if star == 1 {
 					return day3star1(data)
