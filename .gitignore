@@ -2,4 +2,6 @@ inputs/
 outputs/
 days/dayurls.go
 
-vimbegood.txt
+daytemplate.txt
+exampletemplate.txt
+newday.sh

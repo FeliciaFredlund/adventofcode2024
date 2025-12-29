@@ -39,7 +39,7 @@ func RunDay(day, star int, example bool) {
 			fmt.Printf("Please add the example output for day %d\n", day)
 			os.Exit(1)
 		}
-		fmt.Printf("Expected Result:\n%s\n", string(exampleOutput))
+		fmt.Printf("\nExpected Result:\n%s\n\n", string(exampleOutput))
 	}
 
 	fmt.Println("Output: " + string(output))
