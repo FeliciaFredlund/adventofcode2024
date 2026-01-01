@@ -93,17 +93,37 @@ func getOutput(day, star int, data []byte) []byte {
 			return day4star1(data)
 		}
 		return day4star2(data)
+	case 5:
+		if star == 1 {
+			return day5star1(data)
+		}
+		return day5star2(data)
 		/*
-			case 5:
-				if star == 1 {
-					return day5star1(data)
-				}
-				return day5star2(data)
 			case 6:
 				if star == 1 {
 					return day6star1(data)
 				}
 				return day6star2(data)
+			case 7:
+				if star == 1 {
+					return day7star1(data)
+				}
+				return day7star2(data)
+			case 8:
+				if star == 1 {
+					return day8star1(data)
+				}
+				return day8star2(data)
+			case 9:
+				if star == 1 {
+					return day9star1(data)
+				}
+				return day9star2(data)
+			case 10:
+				if star == 1 {
+					return day10star1(data)
+				}
+				return day10star2(data)
 		*/
 	}
 	return nil
