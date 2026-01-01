@@ -26,7 +26,33 @@ func day4star1(data []byte) []byte {
 }
 
 func day4star2(data []byte) []byte {
-	return data
+	stringified := string(data)
+	matrix := [][]string{}
+
+	for line := range strings.Lines(stringified) {
+		matrix = append(matrix, strings.Split(strings.TrimSpace(line), ""))
+	}
+
+	count := 0
+	for i := range len(matrix) {
+		if i == 0 || i == len(matrix)-1 {
+			continue
+		}
+
+		for j := range len(matrix[0]) {
+			if j == 0 || j == len(matrix[0])-1 {
+				continue
+			}
+
+			if matrix[i][j] == "A" {
+				if lookForMS(matrix, i, j) {
+					count++
+				}
+			}
+		}
+	}
+
+	return []byte(strconv.Itoa(count))
 }
 
 func lookForMAS(matrix [][]string, xi, xj int) int {
@@ -123,4 +149,29 @@ func lookForMAS(matrix [][]string, xi, xj int) int {
 	}
 
 	return countMAS
+}
+
+func lookForMS(matrix [][]string, ai, aj int) bool {
+	if ai-1 < 0 || ai+1 == len(matrix) || aj-1 < 0 || aj+1 == len(matrix[0]) {
+		return false
+	}
+
+	if matrix[ai-1][aj-1] == "M" && matrix[ai+1][aj+1] == "S" {
+		if matrix[ai-1][aj+1] == "M" && matrix[ai+1][aj-1] == "S" {
+			return true
+		}
+		if matrix[ai-1][aj+1] == "S" && matrix[ai+1][aj-1] == "M" {
+			return true
+		}
+	}
+	if matrix[ai-1][aj-1] == "S" && matrix[ai+1][aj+1] == "M" {
+		if matrix[ai-1][aj+1] == "M" && matrix[ai+1][aj-1] == "S" {
+			return true
+		}
+		if matrix[ai-1][aj+1] == "S" && matrix[ai+1][aj-1] == "M" {
+			return true
+		}
+	}
+
+	return false
 }
