@@ -1,11 +1,50 @@
 package days
 
+import (
+	"slices"
+	"strconv"
+	"strings"
+)
+
 func day5star1(data []byte) []byte {
-	return data
+	/*
+		I guess...
+		checking from the back of a report to see if its page is to the left of any of the other pages is the way to go
+	*/
+	stringified := string(data)
+	rules, reports, _ := strings.Cut(stringified, "\n\n")
 
-	//sumMiddlePages := 0
+	pagesToTheRightOfKeyPage := map[string][]string{}
+	for rule := range strings.FieldsSeq(rules) {
+		left, right, found := strings.Cut(rule, "|")
+		if !found {
+			continue
+		}
+		pagesToTheRightOfKeyPage[left] = append(pagesToTheRightOfKeyPage[left], right)
+	}
 
-	//return []byte(strconv.Itoa(sumMiddlePages))
+	sumMiddlePages := 0
+	for report := range strings.FieldsSeq(reports) {
+		pages := strings.Split(report, ",")
+		slices.Reverse(pages)
+		goodReport := true
+	reportLoop:
+		for i, page := range pages {
+			for j := i + 1; j < len(pages); j++ {
+				if slices.Contains(pagesToTheRightOfKeyPage[page], pages[j]) {
+					goodReport = false
+					break reportLoop
+				}
+			}
+
+		}
+		if goodReport {
+			middlePage, _ := strconv.Atoi(pages[len(pages)/2])
+			sumMiddlePages += middlePage
+		}
+	}
+
+	return []byte(strconv.Itoa(sumMiddlePages))
 }
 
 func day5star2(data []byte) []byte {
@@ -13,7 +52,6 @@ func day5star2(data []byte) []byte {
 }
 
 /*
-
 TURNS OUT IN THE REAL DATA THERE IS NO TRUE ORDER TO THE PAGES. THEY EXIST IN A CIRCLE
 
 func day5star1(data []byte) []byte {
